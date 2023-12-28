@@ -42,10 +42,15 @@
   <!--   <test_depend>gtest</test_depend> -->
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
-  <exec_depend>smpl_test</exec_depend>
-  <exec_depend>pyre</exec_depend>
-  <exec_depend>message_runtime</exec_depend>
+  <!-- <build_depend>smpl_test</build_depend> -->
+  <!-- <build_depend>pyre</build_depend> -->
+  <!-- <build_depend>smpl_test</build_depend> -->
+
   <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>bencmarking_utils</exec_depend>
+  <exec_depend>pyre</exec_depend>
+  <exec_depend>smpl_test</exec_depend>
 
 
   <export>

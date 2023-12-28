@@ -2,35 +2,36 @@
 
 import argparse
 import pathlib
+import re
 import shutil
 import tempfile
+from os import system
 
 import urdfpy
 import yaml
 from numpy import pi
+from rospkg import RosPack
 
 
 class IOManager:
     def __init__(self, args):
-        self._package_url_prefix = \
-            'package://' + \
-            str(pathlib.Path(args.input_urdf_file).resolve().parents[1].stem)
+        self._package_paths_to_prefixes = {}
         self._sbpl_collision_model_file = args.sbpl_collision_model_file
         self._input_urdf_file = args.input_urdf_file
-        self._output_urdf_file = args.output_urdf_file
-        # self._robot_package_path_prefix = args.robot_package_path
-        self._robot_package_path_prefix = \
-            str(pathlib.Path(args.input_urdf_file).resolve().parents[1])
+        self._output_urdf_file = args.output_urdf_file \
+            if args.output_urdf_file is not None \
+            else args.input_urdf_file
 
     def load_sbpl_collision_spheres(self):
         return self._load_sbpl_collision_model()['robot_collision_model']['spheres_models']
 
     def load_urdf(self):
         def load_tmp_file_cb(tmp_file_path, urdf_file_path):
-            return urdfpy.URDF.load(tmp_file_path)
+            # system("cat " + str(tmp_file_path))
+            return urdfpy.URDF.load(str(tmp_file_path))
 
         # Load the urdf from the corrected tmp file
-        return self._process_urdf_file(self._input_urdf_file, load_tmp_file_cb, input=True)
+        return self._process_urdf_file(self._input_urdf_file, load_tmp_file_cb, is_input=True)
 
     def save_urdf(self, robot_urdf):
         robot_urdf.save(self._output_urdf_file)
@@ -39,21 +40,14 @@ class IOManager:
             shutil.copymode(urdf_file_path, tmp_file_path)
             shutil.move(tmp_file_path, urdf_file_path)
 
-        return self._process_urdf_file(self._output_urdf_file, move_tmp_file_cb, input=False)
+        return self._process_urdf_file(self._output_urdf_file, move_tmp_file_cb, is_input=False)
 
     def _load_sbpl_collision_model(self):
         with open(self._sbpl_collision_model_file, 'r') as file:
             return yaml.safe_load(file)
 
-    def _process_urdf_file(self, urdf_file, callback_fn, input=True):
+    def _process_urdf_file(self, urdf_file, callback_fn, is_input=True):
         urdf_file_path = pathlib.Path(urdf_file)
-
-        if input:
-            old_pattern = self._package_url_prefix
-            new_pattern = self._robot_package_path_prefix
-        else:
-            old_pattern = self._robot_package_path_prefix
-            new_pattern = self._package_url_prefix
 
         # Open a temp dir (context manger makes it easy to handle)
         with tempfile.TemporaryDirectory() as tmpdirname:
@@ -64,10 +58,40 @@ class IOManager:
             with open(urdf_file_path, 'r') as fin:
                 with open(tmp_file_path, 'w') as fout:
                     for line in fin:
-                        fout.write(line.replace(old_pattern, new_pattern))
+                        old_pattern, new_pattern = self._get_replace_patterns(line,
+                                                                              is_input)
+
+                        if old_pattern is not None:
+                            # print("REPLACING " + old_pattern + " WITH " + new_pattern)
+                            fout.write(line.replace(old_pattern, new_pattern))
+                        else:
+                            fout.write(line)
 
             # Call the callback
             return callback_fn(tmp_file_path, urdf_file_path)
+
+    def _get_replace_patterns(self, string, is_input):
+        old_pattern = new_pattern = None
+
+        if is_input:
+            package_prefix_regex = r'package://([^/]+)'
+            match = re.search(package_prefix_regex, string)
+
+            if match:
+                package_prefix = match.group(0)
+                package_path = RosPack().get_path(match.group(1))
+                self._package_paths_to_prefixes[package_path] = package_prefix
+
+                old_pattern = package_prefix
+                new_pattern = package_path
+        else:
+            for package_path, package_prefix in self._package_paths_to_prefixes.items():
+                if re.search(package_path, string):
+                    old_pattern = package_path
+                    new_pattern = package_prefix
+                    break
+
+        return old_pattern, new_pattern
 
 
 def print_link_collision_info(link):
@@ -149,8 +173,9 @@ if __name__ == '__main__':
     parser.add_argument('input_urdf_file',
                         type=str,
                         help='Path to URDF file containing the original robot description')
-    parser.add_argument('output_urdf_file',
+    parser.add_argument('-o', '--output_urdf_file',
                         type=str,
+                        required=False,
                         help='Path to URDF file containing the modified robot description')
     parser.add_argument('-v', '--verbose',
                         action='store_true')

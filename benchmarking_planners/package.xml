@@ -48,7 +48,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <exec_depend>bencmarking_utils</exec_depend>
+  <exec_depend>benchmarking_utils</exec_depend>
   <exec_depend>pyre</exec_depend>
   <exec_depend>smpl_test</exec_depend>
 

@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+
+import argparse
+import pathlib
+import shutil
+import tempfile
+
+import urdfpy
+import yaml
+from numpy import pi
+
+
+class IOManager:
+    def __init__(self, args):
+        self._package_url_prefix = \
+            'package://' + \
+            str(pathlib.Path(args.input_urdf_file).resolve().parents[1].stem)
+        self._sbpl_collision_model_file = args.sbpl_collision_model_file
+        self._input_urdf_file = args.input_urdf_file
+        self._output_urdf_file = args.output_urdf_file
+        # self._robot_package_path_prefix = args.robot_package_path
+        self._robot_package_path_prefix = \
+            str(pathlib.Path(args.input_urdf_file).resolve().parents[1])
+
+    def load_sbpl_collision_spheres(self):
+        return self._load_sbpl_collision_model()['robot_collision_model']['spheres_models']
+
+    def load_urdf(self):
+        def load_tmp_file_cb(tmp_file_path, urdf_file_path):
+            return urdfpy.URDF.load(tmp_file_path)
+
+        # Load the urdf from the corrected tmp file
+        return self._process_urdf_file(self._input_urdf_file, load_tmp_file_cb, input=True)
+
+    def save_urdf(self, robot_urdf):
+        robot_urdf.save(self._output_urdf_file)
+
+        def move_tmp_file_cb(tmp_file_path, urdf_file_path):
+            shutil.copymode(urdf_file_path, tmp_file_path)
+            shutil.move(tmp_file_path, urdf_file_path)
+
+        return self._process_urdf_file(self._output_urdf_file, move_tmp_file_cb, input=False)
+
+    def _load_sbpl_collision_model(self):
+        with open(self._sbpl_collision_model_file, 'r') as file:
+            return yaml.safe_load(file)
+
+    def _process_urdf_file(self, urdf_file, callback_fn, input=True):
+        urdf_file_path = pathlib.Path(urdf_file)
+
+        if input:
+            old_pattern = self._package_url_prefix
+            new_pattern = self._robot_package_path_prefix
+        else:
+            old_pattern = self._robot_package_path_prefix
+            new_pattern = self._package_url_prefix
+
+        # Open a temp dir (context manger makes it easy to handle)
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            # tmp file location
+            tmp_file_path = pathlib.Path(tmpdirname)/urdf_file_path.name
+
+            # Write each line in fout replacing the ros url prefix with the package path
+            with open(urdf_file_path, 'r') as fin:
+                with open(tmp_file_path, 'w') as fout:
+                    for line in fin:
+                        fout.write(line.replace(old_pattern, new_pattern))
+
+            # Call the callback
+            return callback_fn(tmp_file_path, urdf_file_path)
+
+
+def print_link_collision_info(link):
+    """ For debugging """
+    print(f'{link.name} ({len(link.collisions)} collision geometries)')
+    for collision in link.collisions:
+        print(f'  - name: {collision.name}')
+        print(f'  - origin:\n{collision.origin}')
+        print('  - geometry:')
+        for attr in dir(collision.geometry):
+            if not attr.startswith('_'):
+                print(f'    - {attr}: {getattr(collision.geometry, attr)}')
+
+
+def update_robot_collision_geometry(robot_urdf, spheres_models):
+    for link in robot_urdf.links:
+        # Remove existing collision objects of the link
+        link.collisions = []
+
+        # Insert collision spheres from the SBPL model
+        for spheres_model in spheres_models:
+            if spheres_model['link_name'] != link.name:
+                continue
+
+            if spheres_model['auto']:
+                continue
+
+            if spheres_model['spheres'][0]['radius'] == 0.:
+                continue
+
+            # Insert the specified collision spheres for this link
+            for sphere in spheres_model['spheres']:
+                link.collisions.append(
+                    urdfpy.Collision(
+                        name=sphere['name'],
+                        origin=[[1., 0., 0., sphere['x'],],
+                                [0., 1., 0., sphere['y'],],
+                                [0., 0., 1., sphere['z'],],
+                                [0., 0., 0., 1.,]],
+                        geometry=urdfpy.Geometry(sphere=urdfpy.Sphere(sphere['radius']))))
+
+            break
+
+
+def main(args):
+    io_manager = IOManager(args)
+
+    # Load all defined spheres models for the robot from the SBPL file
+    spheres_models = io_manager.load_sbpl_collision_spheres()
+
+    # Load the robot URDF definition
+    robot = io_manager.load_urdf()
+
+    # Insert the collision spheres as geometries in the robot description
+    update_robot_collision_geometry(robot, spheres_models)
+
+    # Save the modified robot model to a new URDF file
+    io_manager.save_urdf(robot)
+
+    if args.verbose:
+        cfg = {'torso_lift_joint': 0,  # 0.4,
+               'shoulder_pan_joint': 0,  # pi / 2,
+               'shoulder_lift_joint': 0,  # 87 / 180 * pi,
+               'elbow_flex_joint': 0,  # 129 / 180 * pi,
+               'wrist_flex_joint': 0}  # 125 / 180 * pi}
+
+        robot.show(use_collision=True, cfg=cfg)
+
+        for link in robot.links:
+            print_link_collision_info(link)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='Insert an SBPL collision model to a URDF robot description file')
+    parser.add_argument('sbpl_collision_model_file',
+                        type=str,
+                        help='Path to YAML file containing the SBPL collision model')
+    parser.add_argument('input_urdf_file',
+                        type=str,
+                        help='Path to URDF file containing the original robot description')
+    parser.add_argument('output_urdf_file',
+                        type=str,
+                        help='Path to URDF file containing the modified robot description')
+    parser.add_argument('-v', '--verbose',
+                        action='store_true')
+    args = parser.parse_args()
+
+    main(args)

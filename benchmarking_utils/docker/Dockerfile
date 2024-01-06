@@ -56,3 +56,5 @@ RUN /bin/bash -c \
         && rosrun benchmarking_utils sbpl2urdf \
             "$(rospack find sbpl_collision_checking_test)/config/collision_model_fetch.yaml" \
             "$(rospack find robowflex_resources)/fetch/robots/fetch.urdf"'
+
+ENTRYPOINT /bin/bash -c "source devel/setup.bash && exec /bin/bash"

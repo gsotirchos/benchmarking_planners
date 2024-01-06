@@ -76,7 +76,7 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
       ```
 
 
- 2. Prepare workspace and clone this repository:
+ 2. Prepare a workspace and clone this repository:
     ``` bash
     mkdir benchmarking_ws/src
     cd benchmarking_ws/src
@@ -118,7 +118,7 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
 
 ## 2. Benchmarking
 
-Before proceeding first source the workspace's environment setup file:
+First source the workspace's environment setup file:
 
 ``` bash
 source devel/setup.bash
@@ -138,20 +138,20 @@ source benchmarking_utils/bash_scripts/benchmark_smpl.sh
 ### 2.2. Benchmarking Pyre
 
 Follow the steps 1 and 2 from the [benchmarking and visualizing section](https://github.com/KavrakiLab/pyre/tree/master#4-benchmarking-and-visualizing-the-results) of Pyre's README:
- 1. Start a rosmaster instance (if you did not start one already).
+ 1. Start a rosmaster instance:
 
     ``` bash
     roscore  # in a separate terminal
     ```
 
  2. Run one of the following scripts.
-    - Benchmark SPARK, FLAME with full databases (500) and corresponds to Fig. 4b) for all three datasets.
+    - Benchmark SPARK and FLAME with full databases (500):
 
       ``` bash
       rosrun pyre benchmark.sh
       ```
 
-    - Benchmark SPARK,FLAME with incremental databases (10, 30, 50, 100, 300, 500 corresponds to Fig. 4c) for 'shelf_height_rot'.
+    - Benchmark SPARK and FLAME with incremental databases (10, 30, 50, 100, 300, 500) for 'shelf_height_rot'.
 
       ``` bash
       rosrun pyre benchmark_inc.sh

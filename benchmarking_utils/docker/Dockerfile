@@ -47,6 +47,7 @@ RUN catkin build -j $(($(nproc) / 2 - 1)) \
 RUN unzip src/benchmarking_planners/pyre/datasets.zip -d src/benchmarking_planners/pyre
 RUN unzip src/benchmarking_planners/pyre/database.zip -d src/benchmarking_planners/pyre
 
+# Update the Fetch robot's collision geometry
 RUN /bin/bash -c \
     'source devel/setup.bash \
         && roscp robowflex_resources fetch.urdf \

@@ -167,10 +167,10 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Insert an SBPL collision model to a URDF robot description file')
-    parser.add_argument('sbpl_collision_model_file',
+    parser.add_argument('SBPL_COLLISION_MODEL',
                         type=str,
                         help='Path to YAML file containing the SBPL collision model')
-    parser.add_argument('input_urdf_file',
+    parser.add_argument('INPUT_URDF_FILE',
                         type=str,
                         help='Path to URDF file containing the original robot description')
     parser.add_argument('-o', '--output_urdf_file',

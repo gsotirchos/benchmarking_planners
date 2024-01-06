@@ -17,14 +17,15 @@ Instructions for both a [Dockerfile](benchmarking_utils/docker/Dockerfile) ([1.1
 
  2. Then clone this repository:
 
+    `TODO` replace SSH with HTTPS url when making public
     ``` bash
-    git clone --recurse-submodules https://github.com/gsotirchos/benchmarking_planners
+    git clone --recurse-submodules git@github.com:gsotirchos/benchmarking_planners.git
     ```
 
  3. Call the image building script:
 
     ``` bash
-    source benchmarking_utils/docker/build-docker.sh
+    source benchmarking_planners/benchmarking_utils/docker/build-docker.sh
     ```
 
 

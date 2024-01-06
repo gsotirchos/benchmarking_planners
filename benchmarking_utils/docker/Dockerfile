@@ -42,10 +42,10 @@ RUN catkin config \
 RUN catkin build -j $(($(nproc) / 2 - 1)) \
         --limit-status-rate 0.001 \
         --no-notify
-RUN . devel/setup.sh
 
-# Extract Pyre's datasets
+# Extract Pyre's pre-generated datasets and database
 RUN unzip src/benchmarking_planners/pyre/datasets.zip -d src/benchmarking_planners/pyre
+RUN unzip src/benchmarking_planners/pyre/database.zip -d src/benchmarking_planners/pyre
 
 RUN /bin/bash -c \
     'source devel/setup.bash \

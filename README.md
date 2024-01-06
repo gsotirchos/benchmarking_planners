@@ -17,7 +17,7 @@ Instructions for both a [Dockerfile](benchmarking_utils/docker/Dockerfile) ([1.1
 
  2. Then clone this repository:
 
-    `TODO` replace SSH with HTTPS url when making public
+    `TODO` *replace SSH with HTTPS url when making public*
     ``` bash
     git clone --recurse-submodules git@github.com:gsotirchos/benchmarking_planners.git
     ```

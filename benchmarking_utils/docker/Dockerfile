@@ -27,9 +27,7 @@ RUN pip install --upgrade pip
 RUN pip install urdfpy numpy==1.20
 
 # Setup Catkin workspace
-RUN mkdir -p ws/src
-WORKDIR /ws/src
-RUN git clone --depth 1 --recurse-submodules  https://github.com/gsotirchos/benchmarking_planners
+ADD . /ws/src/benchmarking_planners
 
 # Install dependencies
 WORKDIR /ws

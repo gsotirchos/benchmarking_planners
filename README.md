@@ -1,6 +1,9 @@
 # Overview
 
 `TODO`
+ - *Brief description*
+ - *Links to paper/media*
+ - *Citation*
 
 
 ## 1. Installation
@@ -198,3 +201,6 @@ docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/sh
 ## Links
 
 `TODO`
+ - *link to SMPL*
+ - *link to Pyre*
+ - *link to …*

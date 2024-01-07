@@ -8,7 +8,7 @@
 
 ## 1. Installation
 
-Instructions for both a [Dockerfile](benchmarking_utils/docker/Dockerfile) ([1.1.](#11-docker)) and as well as a native ROS workspace installation are provided ([1.2.](#12-native)) below. If you are not familiar with the ROS infrastructure, using the Docker installation is recommended.
+Instructions for both a [Dockerfile](benchmarking_utils/docker/Dockerfile) ([1.1.](#11-docker)) as well as a native ROS workspace installation are provided ([1.2.](#12-native)) below. If you are not familiar with the ROS infrastructure, using the Docker installation is recommended.
 
 
 ### 1.1. Docker

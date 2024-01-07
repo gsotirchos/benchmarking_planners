@@ -16,7 +16,7 @@ from rospkg import RosPack
 class IOManager:
     def __init__(self, args):
         self._package_paths_to_prefixes = {}
-        self._sbpl_collision_model_file = args.sbpl_collision_model_file
+        self._sbpl_collision_model_file = args.sbpl_collision_model
         self._input_urdf_file = args.input_urdf_file
         self._output_urdf_file = args.output_urdf_file \
             if args.output_urdf_file is not None \

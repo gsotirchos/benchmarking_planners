@@ -48,12 +48,10 @@ RUN unzip src/benchmarking_planners/pyre/datasets.zip -d src/benchmarking_planne
 RUN unzip src/benchmarking_planners/pyre/database.zip -d src/benchmarking_planners/pyre
 
 # Update the Fetch robot's collision geometry
-RUN /bin/bash -c \
-    'source devel/setup.bash \
-        && roscp robowflex_resources fetch.urdf \
-            "$(rospack find robowflex_resources)/fetch/robots/fetch.backup" \
-        && rosrun benchmarking_utils sbpl2urdf \
-            "$(rospack find sbpl_collision_checking_test)/config/collision_model_fetch.yaml" \
-            "$(rospack find robowflex_resources)/fetch/robots/fetch.urdf"'
+RUN cp src/benchmarking_planners/robowflex_resources/fetch/robots/fetch.urdf \
+        src/benchmarking_planners/robowflex_resources/fetch/robots/fetch.backup
+RUN src/benchmarking_planners/benchmarking_utils/scripts/sbpl2urdf \
+        src/benchmarking_planners/smpl/sbpl_collision_checking_test/config/collision_model_fetch.yaml \
+        src/benchmarking_planners/robowflex_resources/fetch/robots/fetch.urdf
 
 ENTRYPOINT /bin/bash -c "source devel/setup.bash && exec /bin/bash"

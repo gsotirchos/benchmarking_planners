@@ -16,11 +16,11 @@ from rospkg import RosPack
 class IOManager:
     def __init__(self, args):
         self._package_paths_to_prefixes = {}
-        self._sbpl_collision_model_file = args.sbpl_collision_model
-        self._input_urdf_file = args.input_urdf_file
+        self._sbpl_collision_model_file = args.SBPL_COLLISION_MODEL
+        self._input_urdf_file = args.INPUT_URDF_FILE
         self._output_urdf_file = args.output_urdf_file \
             if args.output_urdf_file is not None \
-            else args.input_urdf_file
+            else args.INPUT_URDF_FILE
 
     def load_sbpl_collision_spheres(self):
         return self._load_sbpl_collision_model()['robot_collision_model']['spheres_models']

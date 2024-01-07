@@ -15,9 +15,9 @@ Instructions for both a [Dockerfile](benchmarking_utils/docker/Dockerfile) ([1.1
 
  1. You can install docker (if not already installed) on you machine by following the instructions [here](https://docs.docker.com/get-docker/).
 
- 2. Then clone this repository:
+ 2. Then recursively clone this repository:
 
-    `TODO` *replace SSH with HTTPS url when making public*
+    `TODO` *replace SSH with HTTPS url when making this public*
     ``` bash
     git clone --recurse-submodules git@github.com:gsotirchos/benchmarking_planners.git
     ```
@@ -39,9 +39,9 @@ sudo docker run --rm -it --name benchmarking_container benchmarking
 
 The following instructions have been tested on **Ubuntu 20.04**. Similar instructions should work for other Linux distributions.
 
- 1. Install dependencies
+ 1. Install dependencies:
 
-    - Required packages:
+    - Required packages
 
       ``` bash
       sudo apt update
@@ -51,7 +51,7 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
           cmake wget git zip python3-pip
       ```
 
-    - **GCC 7** (for compiling SMPL):
+    - **GCC 7** (for compiling SMPL)
 
       ``` bash
       sudo apt install gcc-7 g++-7
@@ -60,7 +60,7 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
       unset CMAKE_GENERATOR  # use makefiles
       ```
 
-    - **[SBPL](https://github.com/shohinm/sbpl/tree/epase)**:
+    - **[SBPL](https://github.com/shohinm/sbpl/tree/epase)**
 
       ``` bash
       git clone -b epase https://github.com/shohinm/sbpl \
@@ -73,7 +73,7 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
       cd ../..
       ```
 
-    - **[urdfpy](https://github.com/mmatl/urdfpy)**:
+    - **[urdfpy](https://github.com/mmatl/urdfpy)**
 
       ``` bash
       pip install urdfpy numpy==1.20
@@ -156,7 +156,7 @@ Follow the steps 1 and 2 from the [benchmarking and visualizing section](https:/
       rosrun pyre benchmark.sh
       ```
 
-    - Benchmark SPARK and FLAME with incremental databases (10, 30, 50, 100, 300, 500) for 'shelf_height_rot'.
+    - Benchmark SPARK and FLAME with incremental databases (10, 30, 50, 100, 300, 500) for 'shelf_height_rot':
 
       ``` bash
       rosrun pyre benchmark_inc.sh
@@ -203,6 +203,6 @@ docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/sh
 ## Links
 
 `TODO`
- - *link to SMPL*
- - *link to Pyre*
- - *link to …*
+ - *Link to SMPL*
+ - *Link to Pyre*
+ - *Link to …*

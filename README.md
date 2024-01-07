@@ -133,7 +133,7 @@ source devel/setup.bash
 
 ### 2.1. Benchmarking SMPL
 
-Source the benchmarking script to generate the planning results in the following structure `~/.ros/smpl_benchmarks/<problem-name>/<index>.log` (**note**: this will overwrite the folder's contents).
+Source the benchmarking script to generate the planning results in the following structure `~/.ros/smpl_benchmarks/<problem-name>.csv` (**note**: this will overwrite the folder's contents).
 
 ``` bash
 source benchmarking_utils/bash_scripts/benchmark_smpl.sh

@@ -100,6 +100,7 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -Wno-dev
     catkin build
+
     source devel/setup.bash
     ```
 
@@ -112,9 +113,9 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
  6. Update the Fetch robot's URDF geometry using SBPL's collision 
     spheres definition:
     ``` bash
-    roscp robowflex_resources fetch.urdf \
+    cp "$(rospack find robowflex_resources)/fetch/robots/fetch.urdf" \
         "$(rospack find robowflex_resources)/fetch/robots/fetch.backup"
-    rosrun benchmarking_utils sbpl2urdf \
+    "$(rospack find benchmarking_utils)/scripts/sbpl2urdf" \
         "$(rospack find sbpl_collision_checking_test)/config/collision_model_fetch.yaml" \
         "$(rospack find robowflex_resources)/fetch/robots/fetch.urdf"
     ```
@@ -169,7 +170,7 @@ Follow the steps 1 and 2 from the [benchmarking and visualizing section](https:/
 To plot the results for SMPL launch the visualization script by providing the path to the directory containing all results for all the variants of a planning problem, e.g.:
 
 ``` bash
-rosrun benchmarking_utils visualize_smpl dataset:="~/.ros/smpl_benchmarks/shelf_zero_test"
+"$(rospack find benchmarking_utils)/scripts/visualize_smpl" ~/.ros/smpl_benchmarks/shelf_zero_test
 ```
 
 

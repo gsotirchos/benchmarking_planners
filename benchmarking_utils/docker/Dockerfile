@@ -17,7 +17,7 @@ RUN cmake -Wno-dev .. \
 WORKDIR /
 
 # Set up GCC 7 (for compiling SMPL)
-RUN apt install -y gcc-7 g++-7
+RUN apt-get install -y gcc-7 g++-7
 ENV CC=/usr/bin/gcc-7
 ENV CXX=/usr/bin/g++-7
 ENV CMAKE_GENERATOR=
@@ -29,7 +29,7 @@ RUN pip install urdfpy numpy==1.20
 # Setup Catkin workspace
 ADD . /ws/src/benchmarking_planners
 
-# Install dependencies
+# Install workspace dependencies
 WORKDIR /ws
 RUN rosdep install --from-paths ./src -i -r -y
 

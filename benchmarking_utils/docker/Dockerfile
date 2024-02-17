@@ -7,7 +7,7 @@ ARG WS_PATH="/ws"
 # Setup Catkin workspace
 ADD ./ "${WS_PATH}"/src/benchmarking_planners
 
-Install dependencies
+# Install dependencies
 RUN "${WS_PATH}"/src/benchmarking_planners/benchmarking_utils/bash_scripts/pre-build.sh
 
 # Build the workspace

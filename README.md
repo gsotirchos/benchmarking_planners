@@ -25,7 +25,7 @@ Instructions for both a [Dockerfile](benchmarking_utils/docker/Dockerfile) ([1.1
  3. Call the image building script:
 
     ``` bash
-    source benchmarking_planners/benchmarking_utils/docker/build-docker.sh
+    benchmarking_planners/benchmarking_utils/docker/build-docker.sh
     ```
 
 

@@ -1,0 +1,27 @@
+Bootstrap: docker
+#From: ubuntu:18.04
+From: ros:noetic-ros-base
+
+%setup
+    mkdir -p "${APPTAINER_ROOTFS}"/opt/catkin_ws
+
+%post
+    scripts_path=/opt/catkin_ws/src/benchmarking_planners/benchmarking_utils/bash_scripts
+
+    # Install dependencies
+    "${scripts_path}"/pre-build.sh
+
+    # Build workspace
+    #"${scripts_path}"/build-ws.sh
+
+    # Prepare for benchmarking
+    #"${scripts_path}"/post-build.sh
+    
+%environment
+    export CC="$(type -p gcc-7)"
+    export CXX="$(type -p g++-7)"
+
+%runtscript
+    # TODO: ros_entrypoint
+    #[ -f /opt/ros/noetic/setup.bash ] && . /opt/ros/noetic/setup.bash
+    [ -x /ros_entrypoint.sh ] && /ros_entrypoint.sh bash

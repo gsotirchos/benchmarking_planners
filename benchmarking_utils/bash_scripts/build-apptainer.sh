@@ -10,12 +10,12 @@ if [[ ! -d "${container_path}" ]]; then
         "${ws_path}"/src/benchmarking_planners/benchmarking_utils/apptainer/benchmarking.def
 fi
 
-if [[ ! -f "${ws_path}"/devel/setup.bash ]]; then
+apptainer exec \
+    --writable "${container_path}" \
+    "${ws_path}"/src/benchmarking_planners/benchmarking_utils/bash_scripts/build-ws.sh
+
+if [[ ! -f "${ws_path}"/src/benchmarking_planners/robowflex_resources/fetch/robots/fetch.backup ]]; then
     apptainer exec \
         --writable "${container_path}" \
-        "${ws_path}"/src/benchmarking_planners/benchmarking_utils/bash_scripts/build-ws.sh
+        "${ws_path}"/src/benchmarking_planners/benchmarking_utils/bash_scripts/post-build.sh
 fi
-
-#apptainer exec \
-#    --writable "${container_path}" \
-#    "${ws_path}"/src/benchmarking_planners/benchmarking_utils/bash_scripts/post-build.sh

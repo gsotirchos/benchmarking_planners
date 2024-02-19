@@ -11,8 +11,8 @@ apt-get install -y \
 
 # Set up GCC 7 (for compiling SMPL)
 apt-get install -y gcc-7 g++-7
-export CC="$(which gcc-7)"
-export CXX="$(which g++-7)"
+export CC="$(type -p gcc-7)"
+export CXX="$(type -p g++-7)"
 export CMAKE_GENERATOR=
 
 # Install SBPL (SMPL dependency)

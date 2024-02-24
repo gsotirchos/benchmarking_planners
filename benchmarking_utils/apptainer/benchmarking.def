@@ -13,5 +13,5 @@ From: ros:noetic-ros-base
     export CC="$(type -p gcc-7)"
     export CXX="$(type -p g++-7)"
 
-%runtscript
+%runscript
     [ -x /ros_entrypoint.sh ] && /ros_entrypoint.sh bash

@@ -11,9 +11,9 @@ catkin config \
     --cmake-args \
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
         -Wno-dev \
-	-Wno-return-type
+        -Wno-return-type
 catkin build \
     --jobs $(($(nproc) / 2 - 1)) \
     --limit-status-rate 0.001 \
-    --no-notify
-    #--no-deps sbpl_collision_checking \
+    --no-notify #\
+    #--no-deps sbpl_collision_checking

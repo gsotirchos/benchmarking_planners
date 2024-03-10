@@ -11,13 +11,13 @@ planners=(
     "arastar"
     #"awastar"
     #"mhastar"
-    "larastar"
+    #"larastar"
     #"egwastar"
     #"padastar"
 )
 
 start=1
-end=2
+end=100
 
 for planner in "${planners[@]}"; do
     for dset in "${datasets[@]}"; do

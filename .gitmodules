@@ -2,15 +2,16 @@
 	path = leatherman
 	url = https://github.com/shohinm/leatherman
 	branch = base-u18
-[submodule "pyre"]
-	path = pyre
-	url = https://github.com/KavrakiLab/pyre
 [submodule "robowflex_resources"]
 	path = robowflex_resources
 	url = https://github.com/KavrakiLab/robowflex_resources
 [submodule "repos/robowflex"]
 	path = repos/robowflex
 	url = https://github.com/KavrakiLab/robowflex
+[submodule "pyre"]
+	path = pyre
+	url = https://github.com/gsotirchos/pyre
+	branch = fix-process-script
 [submodule "smpl"]
 	path = smpl
 	url = https://github.com/gsotirchos/smpl

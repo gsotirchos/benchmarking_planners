@@ -152,11 +152,14 @@ def main(args):
     io_manager.save_urdf(robot)
 
     if args.verbose:
-        cfg = {'torso_lift_joint': 0,  # 0.4,
-               'shoulder_pan_joint': 0,  # pi / 2,
-               'shoulder_lift_joint': 0,  # 87 / 180 * pi,
-               'elbow_flex_joint': 0,  # 129 / 180 * pi,
-               'wrist_flex_joint': 0}  # 125 / 180 * pi}
+        cfg = {'torso_lift_joint': 0,  # 0.2,
+               'shoulder_pan_joint': 0,  # 25 / 180 * pi,
+               'shoulder_lift_joint': 0,  # 45 / 180 * pi,
+               'elbow_flex_joint': 0,  # -90 / 180 * pi,
+               'wrist_flex_joint': 0,  # -60 / 180 * pi,
+               'l_gripper_finger_joint': 0,  # 0.02,
+               'r_gripper_finger_joint': 0,  # 0.02,
+               }
 
         robot.show(use_collision=True, cfg=cfg)
 

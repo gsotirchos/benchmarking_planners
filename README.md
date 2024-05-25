@@ -1,14 +1,16 @@
 # Overview
 
 `TODO`
+<!--
  - *Brief description*
  - *Links to paper/media*
  - *Citation*
+-->
 
 
 ## 1. Installation
 
-Instructions for both a [Dockerfile](benchmarking_utils/docker/Dockerfile) ([1.1.](#11-docker)) as well as a native ROS workspace installation are provided ([1.2.](#12-native)) below. If you are not familiar with the ROS infrastructure, using the Docker installation is recommended.
+The following instructions are intended for a native ROS workspace installation, from [section 1.2](#12-native) onwards. In addition, instructions for setting up a docker container (in which the same steps can be followed) using a [Dockerfile](benchmarking_utils/docker/Dockerfile) are provided in ([section 1.1](#11-docker)) along with the additional final steps for exporting the experiments' results, in [section 3](#3-visualizing-the-results). If you are not familiar with the ROS infrastructure, using the Docker installation is recommended.
 
 
 ### 1.1. Docker
@@ -17,9 +19,8 @@ Instructions for both a [Dockerfile](benchmarking_utils/docker/Dockerfile) ([1.1
 
  2. Then recursively clone this repository:
 
-    `TODO` *replace SSH with HTTPS url when making this public*
     ``` bash
-    git clone --recurse-submodules git@github.com:gsotirchos/benchmarking_planners.git
+    git clone --recurse-submodules https://github.com/gsotirchos/benchmarking_planners
     ```
 
  3. Call the image building script:
@@ -29,10 +30,10 @@ Instructions for both a [Dockerfile](benchmarking_utils/docker/Dockerfile) ([1.1
     ```
 
 
-Now you can start an interactive docker session and follow the instructions from step [2.](#2-benchmarking) onwards. The name of the workspace is `/ws`.
+Now you can start an interactive docker session and follow the instructions from [step 2](#2-benchmarking) onwards. The name of the workspace is `/ws`.
 
 ```
-sudo docker run --rm -it --name benchmarking_container benchmarking
+sudo docker run -it --name benchmarking_container benchmarking
 ```
 
 ### 1.2. Native
@@ -51,7 +52,7 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
           cmake wget git zip python3-pip
       ```
 
-    - **GCC 7** (for compiling SMPL)
+    - **GCC 7** (for building SMPL)
 
       ``` bash
       sudo apt install gcc-7 g++-7
@@ -133,7 +134,11 @@ source devel/setup.bash
 
 ### 2.1. Benchmarking SMPL
 
-Source the benchmarking script to generate the planning results in the following structure `~/.ros/smpl_benchmarks/<problem-name>.csv` (**note**: this will overwrite the folder's contents).
+Source the benchmarking script to generate the planning results in the following pattern `~/.ros/smpl_benchmarks/<problem-name>.csv`:
+<!--
+> [!WARNING]
+> This will overwrite the folder's contents.
+-->
 
 ``` bash
 source benchmarking_utils/bash_scripts/benchmark_smpl.sh
@@ -142,7 +147,7 @@ source benchmarking_utils/bash_scripts/benchmark_smpl.sh
 
 ### 2.2. Benchmarking Pyre
 
-Follow the steps 1 and 2 from the [benchmarking and visualizing section](https://github.com/KavrakiLab/pyre/tree/master#4-benchmarking-and-visualizing-the-results) of Pyre's README:
+By following **steps 1 and 2** from section [4) Benchmarking and Visualizing the results](https://github.com/KavrakiLab/pyre/tree/master#4-benchmarking-and-visualizing-the-results) in Pyre's README:
  1. Start a rosmaster instance:
 
     ``` bash
@@ -165,44 +170,41 @@ Follow the steps 1 and 2 from the [benchmarking and visualizing section](https:/
 
 ## 3. Visualizing the results
 
-### 3.1. Visualizing SMPL
+Based on **step 3** from section [4) Benchmarking and Visualizing the results](https://github.com/KavrakiLab/pyre/tree/master#4-benchmarking-and-visualizing-the-results) in Pyre's README:
 
-To plot the results for SMPL launch the visualization script by providing the path to the directory containing all results for all the variants of a planning problem, e.g.:
+ 1. Use the `ompl_benchmark_statistics.py` script to aggregate the benchmarking results for each dataset.
 
-``` bash
-"$(rospack find benchmarking_utils)/scripts/visualize_smpl" ~/.ros/smpl_benchmarks/shelf_zero_test
-```
+    ``` bash
+    # Go to the benchmarking folder
+    roscd pyre/benchmark
 
+    # Call the ompl script to aggregate the results in an SQL database
+    python3 ompl_benchmark_statistics.py shelf_zero_test/*.log -d shelf_zero_test_results.db
+    python3 ompl_benchmark_statistics.py shelf_height_test/*.log -d shelf_height_test_results.db
+    python3 ompl_benchmark_statistics.py shelf_height_rot_test/*.log -d shelf_height_rot_test_results.db
+    ```
 
-### 3.2. Visualizing Pyre
+> [!IMPORTANT]
+> If you ran the experiments inside a Docker container you can copy the results files to your host machine with:
+> ``` bash
+> docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/shelf_zero_test_results.db ./
+> docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/shelf_height_test_results.db ./
+> docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/shelf_height_rot_test_results.db ./
+> docker cp benchmarking_container:/ws/src/benchmarking_planners/smpl/... ./  # TODO
+> ```
 
-Follow step 3 from the [benchmarking and visualizing section](https://github.com/KavrakiLab/pyre/tree/master#4-benchmarking-and-visualizing-the-results) of Pyre's README:
+ 2. Launch the visualization script to generate plot the results:
 
-First use the `ompl_benchmark_statistics.py` script to aggregate the benchmarking results for each dataset.
+    ``` bash
+    "$(rospack find benchmarking_utils)/scripts/visualize.py"
+    ```
 
-``` bash
-#Go to the benchmarking folder
-roscd pyre/benchmark
-#Call the ompl script to aggregate the results in an SQL database
-python3 ompl_benchmark_statistics.py shelf_zero_test/*.log -d shelf_zero_test_results.db
-python3 ompl_benchmark_statistics.py shelf_height_test/*.log -d shelf_height_test_results.db
-python3 ompl_benchmark_statistics.py shelf_height_rot_test/*.log -d shelf_height_rot_test_results.db
-```
-
-You can load these files in [Planner Arena](http://plannerarena.org/) to plot the results.
-
-If you are using the docker image you can copy the results to your host machine with:
-
-``` bash
-docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/shelf_zero_test_results.db ./
-docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/shelf_height_test_results.db ./
-docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/shelf_height_rot_test_results.db ./
-```
+Additionally, you can load the aggregated results (*.db) files in [Planner Arena](http://plannerarena.org/) to plot the results.
 
 
 ## Links
 
-`TODO`
- - *Link to SMPL*
- - *Link to Pyre*
- - *Link to …*
+ - [Pyre](https://github.com/KavrakiLab/pyre) by Kavrakilab
+ - [SMPL](https://github.com/aurone/smpl) by Search-Based Planning Lab
+ - [SBPL](https://github.com/sbpl/sbpl) by Search-Based Planning Lab
+ - [urdfpy](https://github.com/mmatl/urdfpy) by Matthew Matl

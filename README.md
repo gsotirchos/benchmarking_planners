@@ -124,48 +124,47 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
 
 ## 2. Benchmarking
 
-First source the workspace's environment setup file:
+ 1. Source the workspace's environment setup file:
 
-``` bash
-source devel/setup.bash
-```
+    ``` bash
+    source devel/setup.bash
+    ```
 
-
-
-### 2.1. Benchmarking SMPL
-
-Source the benchmarking script to generate the planning results in the following pattern `~/.ros/smpl_benchmarks/<problem-name>.csv`:
-<!--
-> [!WARNING]
-> This will overwrite the folder's contents.
--->
-
-``` bash
-source benchmarking_utils/bash_scripts/benchmark_smpl.sh
-```
-
-
-### 2.2. Benchmarking Pyre
-
-By following **steps 1 and 2** from section [4) Benchmarking and Visualizing the results](https://github.com/KavrakiLab/pyre/tree/master#4-benchmarking-and-visualizing-the-results) in Pyre's README:
- 1. Start a rosmaster instance:
+ 2. Start a rosmaster instance:
 
     ``` bash
     roscore  # in a separate terminal
     ```
 
- 2. Run one of the following scripts.
-    - Benchmark SPARK and FLAME with full databases (500):
 
-      ``` bash
-      rosrun pyre benchmark.sh
-      ```
+### Benchmarking SMPL
 
-    - Benchmark SPARK and FLAME with incremental databases (10, 30, 50, 100, 300, 500) for 'shelf_height_rot':
+ 3. Source the benchmarking script to generate the planning results:
+    <!--
+    > [!WARNING]
+    > This will overwrite the folder's contents.
+    -->
+    
+    ``` bash
+    source benchmarking_utils/bash_scripts/benchmark_smpl.sh
+    ```
 
-      ``` bash
-      rosrun pyre benchmark_inc.sh
-      ```
+> [!NOTE]
+> Each run's results are stored in `~/.ros/smpl_benchmarks/<timestamp>/<problem-name>.csv` and then symlinked in `~/.ros/smpl_benchmarks/<problem-name>.csv`.
+
+
+### Benchmarking Pyre
+
+ 4. Run the following scripts to benchmark with the full databases (500):
+
+    ``` bash
+    rosrun pyre benchmark.sh
+    ```
+    
+    (Based on **steps 1 and 2** from section [4) Benchmarking and Visualizing the results](https://github.com/KavrakiLab/pyre/tree/master#4-benchmarking-and-visualizing-the-results) in Pyre's README)
+
+> [!NOTE]
+> Each run's results are stored and overwritten in `$(rospack find pyre)/benchmark/<problem-name>/<planner>_Experiment.log`.
 
 
 ## 3. Visualizing the results
@@ -185,19 +184,16 @@ Based on **step 3** from section [4) Benchmarking and Visualizing the results](h
     ```
 
 > [!IMPORTANT]
-> If you ran the experiments inside a Docker container you can copy the results files to your host machine with:
+> If you ran the experiments inside a Docker container you can then copy the results files to your host machine with:
 > ``` bash
 > docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/shelf_zero_test_results.db ./
 > docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/shelf_height_test_results.db ./
 > docker cp benchmarking_container:/ws/src/benchmarking_planners/pyre/benchmark/shelf_height_rot_test_results.db ./
-> docker cp benchmarking_container:/ws/src/benchmarking_planners/smpl/... ./  # TODO
+> docker cp benchmarking_container:~/.ros/smpl_benchmarks ./
 > ```
 
- 2. Launch the visualization script to generate plot the results:
+ 2. Launch the visualization Jupyter notebook in `$(rospack find benchmarking_utils)/scripts/visualize` plot the results.
 
-    ``` bash
-    "$(rospack find benchmarking_utils)/scripts/visualize.py"
-    ```
 
 Additionally, you can load the aggregated results (*.db) files in [Planner Arena](http://plannerarena.org/) to plot the results.
 

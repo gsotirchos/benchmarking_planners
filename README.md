@@ -192,7 +192,7 @@ Based on **step 3** from section [4) Benchmarking and Visualizing the results](h
 > docker cp benchmarking_container:~/.ros/smpl_benchmarks ./
 > ```
 
- 2. Launch the visualization Jupyter notebook in `$(rospack find benchmarking_utils)/scripts/visualize` plot the results.
+ 2. Launch the visualization Jupyter notebook in `$(rospack find  benchmarking_utils)/scripts/visualize` to plot the results.
 
 
 Additionally, you can load the aggregated results (*.db) files in [Planner Arena](http://plannerarena.org/) to plot the results.

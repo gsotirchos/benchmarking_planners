@@ -17,7 +17,7 @@ planners=(
 )
 
 start=1
-end=1
+end=100
 
 for planner in "${planners[@]}"; do
     for dset in "${datasets[@]}"; do

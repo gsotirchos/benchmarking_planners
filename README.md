@@ -83,7 +83,7 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
 
  2. Prepare a workspace and clone this repository:
     ``` bash
-    mkdir benchmarking_ws/src
+    mkdir -p benchmarking_ws/src
     cd benchmarking_ws/src
     git clone --recurse-submodule https://github.com/gsotirchos/benchmarking_planners
     ```
@@ -97,7 +97,7 @@ The following instructions have been tested on **Ubuntu 20.04**. Similar instruc
     ``` bash
     catkin config \
         --extend /opt/ros/"${ROS_DISTRO}" \
-        --cmake-args
+        --cmake-args \
             -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -Wno-dev
     catkin build

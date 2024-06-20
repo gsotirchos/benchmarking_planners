@@ -26,7 +26,7 @@ cmake -Wno-dev .. \
 
 # Install urdfpy for sbpl2urdf
 pip install --upgrade pip
-pip install urdfpy numpy==1.20
+pip install urdfpy numpy==1.21
 
 # Install workspace dependencies
 cd "${ws_path}" || exit

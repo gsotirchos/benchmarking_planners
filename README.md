@@ -1,11 +1,8 @@
-# Overview
+# Benchmarking ARA* with Motion Primitives and RRT-Connect with uniform sampling
 
-`TODO`
-<!--
- - *Brief description*
- - *Links to paper/media*
- - *Citation*
--->
+[[Paper](https://arxiv.org/abs/2406.09623)]
+
+This project contains the code for setting up and running the benchmarking experiments of ARA* with motion primitives from [SMPL](https://github.com/aurone/smpl) and RRT-Connect with uniform sampling from [OMPL](https://github.com/ompl/ompl).
 
 
 ## 1. Installation
@@ -196,6 +193,19 @@ Based on **step 3** from section [4) Benchmarking and Visualizing the results](h
 
 
 Additionally, you can load the aggregated results (*.db) files in [Planner Arena](http://plannerarena.org/) to plot the results.
+
+
+## Citation
+
+If you find this useful, please cite
+``` latex
+@inproceedings{sotirchos2024benchmarking,
+  title={Search-based versus Sampling-based Robot Motion Planning: A Comparative Study}, 
+  author={Georgios Sotirchos and Zlatan Ajanovic},
+  booktitle={ICAPS'24 Workshop on Planning and Robotics (PlanRob)},
+  year={2024}
+}
+```
 
 
 ## Links

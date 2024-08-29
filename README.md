@@ -197,7 +197,7 @@ Additionally, you can load the aggregated results (*.db) files in [Planner Arena
 
 ## Citation
 
-If you find this useful, please cite
+If you find this useful, please cite:
 ``` latex
 @inproceedings{sotirchos2024benchmarking,
   title={Search-based versus Sampling-based Robot Motion Planning: A Comparative Study}, 
